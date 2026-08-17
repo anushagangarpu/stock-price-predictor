@@ -6,6 +6,7 @@ from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
 import yfinance as yf
+from curl_cffi import requests as curl_requests
 import time
 
 
@@ -259,15 +260,18 @@ if st.session_state.selected_stock:
         with st.spinner("Fetching stock data..."):
             ticker = st.session_state.selected_stock
             try:
+                session = curl_requests.Session(impersonate="chrome")
+
                 data = yf.download(
-            ticker,
-            period="2y",
-            interval="1d",
-            auto_adjust=False,
-            progress=False,
-            threads=False,
-            timeout=60
-        )
+                    ticker,
+                    period="2y",
+                    interval="1d",
+                    auto_adjust=False,
+                    progress=False,
+                    threads=False,
+                    timeout=60,
+                    session=session
+                )
             except Exception as e:
                 st.error(f"Error fetching stock data: {e}")
                 st.stop()
