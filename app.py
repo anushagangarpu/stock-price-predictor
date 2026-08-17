@@ -353,44 +353,16 @@ company = st.text_input(
 if st.button("Search"):
 
     if not company.strip():
-
         st.warning("Please enter a company name.")
 
     else:
-
         ticker = get_ticker(company)
 
-        # Test whether stock exists
-        try:
+        st.session_state.selected_stock = ticker
 
-            test_data = yf.download(
-                ticker,
-                period="5d",
-                progress=False,
-                auto_adjust=True
-            )
-
-            if test_data.empty:
-
-                st.error(
-                    f"Could not find stock: {company}"
-                )
-
-                st.session_state.selected_stock = ""
-
-            else:
-
-                st.session_state.selected_stock = ticker
-
-                st.success(
-                    f"Stock found: {ticker}"
-                )
-
-        except Exception as e:
-
-            st.error(
-                f"Unable to fetch stock data: {e}"
-            )
+        st.success(
+            f"Selected stock: {ticker}"
+        )
 
 
 # =============================================
