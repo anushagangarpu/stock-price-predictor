@@ -393,9 +393,11 @@ if st.session_state.selected_stock:
                 data = yf.download(
     st.session_state.selected_stock,
     period="2y",
-    auto_adjust=True,
+    interval="1d",
+    auto_adjust=False,
     progress=False,
-    threads=False
+    threads=False,
+    timeout=30
 )
 
             except Exception as e:
@@ -410,41 +412,30 @@ if st.session_state.selected_stock:
         # =============================================
         # CHECK DATA
         # =============================================
-
         if data.empty:
             st.error(
                 f"Could not fetch historical data for "
                 f"{st.session_state.selected_stock}."
             )
-
-            st.info(
-                "Yahoo Finance did not return stock data. "
-                "Please try again after a short wait."
+            st.warning(
+                "Yahoo Finance did not return data. "
+                "Please try the prediction again."
             )
-
             st.stop()
+
+            
         # =============================================
         # GET CLOSE PRICE
         # =============================================
 
         try:
-
             close = data["Close"]
-
-            # Handle MultiIndex returned by some
-            # versions of yfinance
-
             if isinstance(close, pd.DataFrame):
                 close = close.iloc[:, 0]
-
+            close = pd.to_numeric(close, errors="coerce")
             close = close.dropna().values.reshape(-1, 1)
-
         except Exception as e:
-
-            st.error(
-                f"Error processing stock data: {e}"
-            )
-
+            st.error(f"Error processing stock data: {e}")
             st.stop()
 
 
