@@ -3,4 +3,5 @@ pandas
 numpy
 scikit-learn
 tensorflow==2.20.0
-yfinance
+yfinance==0.2.66
+curl-cffi>=0.15
