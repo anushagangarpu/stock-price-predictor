@@ -412,22 +412,17 @@ if st.session_state.selected_stock:
         # =============================================
 
         if data.empty:
+            st.error(
+                f"Could not fetch historical data for "
+                f"{st.session_state.selected_stock}."
+            )
 
-    st.error(
-        f"Could not fetch historical data for "
-        f"{st.session_state.selected_stock}."
-    )
-
-    st.info(
-        "Yahoo Finance did not return stock data. "
-        "Please try again after a short wait."
-    )
-
-    st.stop()
+            st.info(
+                "Yahoo Finance did not return stock data. "
+                "Please try again after a short wait."
+            )
 
             st.stop()
-
-
         # =============================================
         # GET CLOSE PRICE
         # =============================================
